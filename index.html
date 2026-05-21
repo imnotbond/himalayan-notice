@@ -36,22 +36,14 @@
     }
   </style>
 
-  <!-- Meta Pixel (country-aware: US=1708777253459299, DE=2071044117089882) -->
+  <!-- Meta Pixel 3477159645768812 (Himalayan Iron / Evoly GE dedicated) -->
   <script>
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    (function(){
-      // Country routing — same logic as Custom Pixel on lucivan-guincho.
-      // DE visitors → Meta DE pixel; everyone else → Meta US.
-      // Detected via navigator.language; fallback to US.
-      var lang = (navigator.language || navigator.userLanguage || '').toLowerCase();
-      var isDE = /^de|-de$/.test(lang);
-      var pixelId = isDE ? '2071044117089882' : '1708777253459299';
-      fbq('init', pixelId);
-      window.__bbMetaPixelId = pixelId; // bb-tracker reads this for CAPI
-      fbq('track', 'PageView');
-    })();
+    fbq('init', '3477159645768812');
+    window.__bbMetaPixelId = '3477159645768812'; // bb-tracker reads this for CAPI
+    fbq('track', 'PageView');
   </script>
-  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1708777253459299&ev=PageView&noscript=1"/></noscript>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3477159645768812&ev=PageView&noscript=1"/></noscript>
   <!-- End Meta Pixel -->
 
   <!-- TikTok Pixel (account mvb meudon — D69I62BC77UA1UK9FD7G) -->
