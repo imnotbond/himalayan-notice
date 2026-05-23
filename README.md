@@ -7,7 +7,7 @@ News-style advertorial promoting Himalayan Iron Shilajit Gummies. Single-market 
 - Static HTML + Tailwind CDN
 - bb-tracker (PostHog 162012 + GTM + dataLayer + Meta CAPI + TikTok browser pixel)
 - Meta Pixel — `3477159645768812` (Himalayan Iron dedicated, single-market US)
-- TikTok Pixel — `D69I62BC77UA1UK9FD7G` (account mvb meudon, browser-side only; no server CAPI yet)
+- TikTok Pixel — `D88K7TBC77U17CDP3710` (Himalayan Iron dedicated, browser + server CAPI)
 
 ## CTA destination
 
