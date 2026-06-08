@@ -7432,8 +7432,11 @@ generateDecreasingNumber(2, 6, 10);
 <script src="https://cdn.shopify.com/storefront/standard-actions.js" type="module" data-source-attribution="shopify.standard_actions"></script>
 
 <script>
-/* BB clone CTA bridge: route every buy/checkout action to the mansculptplus PDP,
-   propagating utm/ttclid/fbclid so the destination Shopify bridge can harvest them. */
+/* BB clone CTA bridge:
+   - In-page anchors (href="#xxx") SCROLL to the local target (fixes <base href>
+     hijacking #buy -> himalayaniron.store). Advertorial CTAs scroll to the offer.
+   - ONLY the offer CTA (data-bb-cta) and the real add-to-cart redirect to the
+     mansculptplus PDP, propagating utm/ttclid/fbclid. */
 (function(){
   var DEST = 'https://mansculptplus.com/products/himalayan-shilajit-gummies';
   function dest(){
@@ -7446,17 +7449,27 @@ generateDecreasingNumber(2, 6, 10);
     try{ if(window.bbTrack) window.bbTrack('cta_clicked', { dest: DEST }); }catch(_){}
     window.location.href = dest();
   }
-  function isBuy(el){
-    var t = (el.textContent || '').trim().toLowerCase();
-    return /(buy now|add to cart|add to bag|check availability|checkout|get yours|order now|claim|shop now|buy|comprar|garantir|reserve|i'm ready)/.test(t);
+  function scrollToHash(hash){
+    var id = (hash || '').replace(/^#/, '');
+    if(!id) return false;
+    var target = document.getElementById(id) || document.querySelector('a[name="'+id+'"]');
+    if(!target) return false;
+    target.scrollIntoView({ behavior:'smooth', block:'start' });
+    return true;
   }
   document.addEventListener('click', function(e){
     var el = e.target.closest && e.target.closest('a,button');
     if(!el) return;
     if(el.id === 'cart-icon-bubble') return;            // ignore header cart icon
-    if(el.closest('form[action*="/cart"]') || el.getAttribute('name')==='add' || isBuy(el)){
-      go(e);
+    // 1) in-page anchor -> smooth scroll (do NOT navigate / redirect)
+    var raw = el.getAttribute && el.getAttribute('href');
+    if(raw && raw.charAt(0) === '#'){
+      if(scrollToHash(raw)){ e.preventDefault(); e.stopPropagation(); }
+      return;
     }
+    // 2) real buy actions only -> redirect to mansculptplus
+    if(el.getAttribute && el.getAttribute('data-bb-cta') !== null){ go(e); return; }
+    if(el.closest('form[action*="/cart"]') || el.getAttribute('name') === 'add'){ go(e); return; }
   }, true);
   document.querySelectorAll('form[action*="/cart"]').forEach(function(f){
     f.addEventListener('submit', go, true);
