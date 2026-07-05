@@ -6,10 +6,24 @@
   <script>
     (function(){
       try {
+        // self-heal: cookie gravado pela versao antiga (SEGUNDOS, 10 digitos) vive ate
+        // 90 dias - Meta exige MILISSEGUNDOS; em segundos le ~1970, descarta o clique
+        // e a conversao espalha por view-through. Reescreve em ms.
+        function heal(name){
+          var m = document.cookie.match(new RegExp('(?:^|; )'+name+'=([^;]*)'));
+          if (!m) return;
+          var p = decodeURIComponent(m[1]).split('.');
+          var hts = Number(p[2]);
+          if (p.length >= 4 && hts > 0 && hts < 1e12) {
+            p[2] = String(Math.round(hts * 1000));
+            document.cookie = name + '=' + p.join('.') + '; max-age=7776000; path=/; SameSite=Lax';
+          }
+        }
+        heal('_fbc'); heal('_fbp');
         var params = new URLSearchParams(window.location.search);
         var fbclid = params.get('fbclid');
         if (fbclid) {
-          var ts = Math.floor(Date.now() / 1000);
+          var ts = Date.now();
           document.cookie = '_fbc=fb.1.' + ts + '.' + fbclid + '; max-age=7776000; path=/; SameSite=Lax';
         }
         // Ensure _fbp exists (Meta browser id) — fbevents.js usually sets it, but
@@ -17,7 +31,7 @@
         // stays consistent across users with adblock.
         if (!/(?:^|; )_fbp=/.test(document.cookie)) {
           var rnd = Math.floor(Math.random() * 2147483647);
-          var t2 = Math.floor(Date.now() / 1000);
+          var t2 = Date.now();
           document.cookie = '_fbp=fb.1.' + t2 + '.' + rnd + '; max-age=7776000; path=/; SameSite=Lax';
         }
       } catch (e) {}
